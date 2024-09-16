@@ -9,9 +9,8 @@
     </head>
     <body>
         <h1>Prueba Api</h1>
-        <button id='listar'>Listar</button>
         <div class="form">
-            <form>
+            <form id="crear">
                 <label for="title">Title</label>
                 <input type="text" id="title" required><br>
     
@@ -19,15 +18,15 @@
                 <input type="text" id="description"  required><br>
 
                 <label for="value">Value</label>
-                <input type="number" id="value" min="0" required><br>
+                <input type="number" id="value" min="1" required><br>
 
                 <label for="category_id">Categoriy</label>
-                <input type="number"  id="category_id" min="0" required><br>
+                <input type="number"  id="category_id" min="1" required><br>
 
                 <label for="images">Images</label>
                 <input type="text" id="images" required>
 
-                <input type="submit" value="Enviar">
+                <button type="submit">Agregar</button>
     
             </form>
         </div>
