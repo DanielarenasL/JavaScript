@@ -1,0 +1,36 @@
+h1{
+    display: flex;
+    position: center;
+}
+li{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 22em;
+    background-color: rgb(174, 0, 255);
+    width: 20em;
+    margin: 30px;
+}
+li img{
+    margin: 10px;
+}
+li button{
+    background-color: #ce2525;
+    border-radius: 5px;
+    height: 30px;
+    width: auto;
+}
+li h3{
+    margin: 5px;
+}
+li p{
+    margin: 5px;
+}
+
+
+li div{
+    margin: 10px;
+}
+
+
