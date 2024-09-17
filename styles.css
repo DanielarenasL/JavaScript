@@ -1,3 +1,8 @@
+body{
+    background-image: url('https://i.postimg.cc/3w7YWMRP/imagen-2024-09-16-234606230.png');
+    background-attachment: fixed;
+    background-size: cover;
+}   
 h1{
     display: flex;
     position: center;
@@ -17,16 +22,22 @@ li img{
     margin: 10px;
 }
 li #eliminar{
-    background-color: #ce2525;
+    border-color: #ff0000;
     border-radius: 5px;
     height: 30px;
     width: auto;
 }
+li #eliminar:hover{
+    background-color: #ff0000;
+}
 li #editar {
-    background-color: #2493dd;
+    border-color: #287fe2;
     border-radius: 5px;
     height: 30px;
     width: auto;
+}
+li #editar:hover{
+    background-color: #287fe2;
 }
 li h3{
     margin: 5px;
@@ -40,4 +51,73 @@ li div{
     margin: 10px;
 }
 
+.form {
+    width: 400px;
+    background: linear-gradient(#212121, #212121) padding-box, linear-gradient(145deg, transparent 35%,#e81cff, #40c9ff) border-box;
+    border: 2px solid transparent;
+    padding: 32px 24px;
+    font-size: 14px;
+    font-family: inherit;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+    border-radius: 16px;
+}
+.form button:active {
+    scale: 0.95;
+}
+.form #crear{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.form .campos-crear{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.form .campos-crear label{
+    display: block;
+    margin-bottom: 5px;
+    color: #717171;
+    font-weight: 600;
+    font-size: 12px;
+}
+.form .campos-crear input{
+    width: 80%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: #fff;
+    font-family: inherit;
+    background-color: transparent;
+    border: 1px solid #414141;
+}
 
+.form .campos-crear input:focus{
+    outline: none;
+    border-color: #e81cff;
+}
+.form .submit{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    align-self: flex-start;
+    font-family: inherit;
+    color: #717171;
+    font-weight: 600;
+    width: 40%;
+    background: #313131;
+    border: 1px solid #414141;
+    padding: 12px 16px;
+    font-size: inherit;
+    gap: 8px;
+    margin-top: 8px;
+    cursor: pointer;
+    border-radius: 6px;
+}
+.form .submit:hover {
+    background-color: #fff;
+    border-color: #fff;
+  }
