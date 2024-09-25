@@ -28,7 +28,8 @@ fetch(url_api + '/posts',{
                 <p>categoria: ${product.category_id}</p>
                 <div>
                     <button onclick='borrar(${product.id})' id='eliminar'>Eliminar</button>
-                    <button onclick='editar(${product.id})' id='editar'>Editar</button>
+                    <button onclick='editar(${product.id}, "${product.title}", "${product.description}", ${JSON.stringify(product.images)}, ${product.value}, ${product.category_id})' id='editar'>Editar</button>
+
                 </div>
             </div>
         </li>`;
@@ -54,7 +55,7 @@ fetch(url_api + '/category',{
                 <p>${category.description}</p>
                 <div>
                     <button onclick='eliminarCategoria(${category.category_id})' id='eliminar'>Eliminar</button>
-                    <button onclick='actualizarCategoria(${category.category_id})' id='editar'>Editar</button>
+                    <button onclick='actualizarCategoria(${category.category_id}, "${category.name}", "${category.description}", "${category.image}")' id='editar'>Editar</button>
                 </div>
             </div>
         </li>`;
@@ -125,13 +126,14 @@ crearcategoria.addEventListener('submit', function(e) {
 
 
 //editar
-function editar(id){
+function editar(id, titulo, descripcion, image, valor, categoria){
 
-    let title = prompt("Digite el nuevo titulo")
-    let description = prompt("Digite la nueva descripcion")
-    let value = parseInt(prompt("Digite el nuevo valor"))
-    let category = parseInt(prompt("Digite la nueva categoria"))
-    let images = [prompt("Digite la nueva imagen")]
+    let title = prompt("Digite el nuevo título", titulo);
+    let description = prompt("Digite la nueva descripción", descripcion);
+    let value = parseInt(prompt("Digite el nuevo valor", valor));
+    let category = parseInt(prompt("Digite la nueva categoría", categoria));
+    let images = JSON.parse(image); // Parsear la cadena JSON
+    images = [prompt("Digite la nueva imagen", images[0])]; 
 
     fetch(url_api + '/posts/' + id, {
         method: 'PATCH',
@@ -177,11 +179,11 @@ function borrar(id){
 }
 
 // actualizar categoría por ID
-function actualizarCategoria(id) {
+function actualizarCategoria(id, nombrecategoria, descripcioncategoria, imagencategoria) {
 
-    let name = prompt("Digite el nuevo nombre");
-    let description = prompt("Digite la nueva descripción");
-    let image = prompt("Digite la nueva imagen");
+    let name = prompt("Digite el nuevo nombre", nombrecategoria);
+    let description = prompt("Digite la nueva descripción", descripcioncategoria);
+    let image = prompt("Digite la nueva imagen", imagencategoria);
 
     fetch(url_api + '/category/' + id, {
         method: 'PATCH',
