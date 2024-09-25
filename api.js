@@ -1,12 +1,13 @@
 //Api
 const autorizacion = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiZGFuaWVsLmFyZW5hczFAdXRwLmVkdS5jbyIsImlhdCI6MTcyNjQ1NjkwMiwiZXhwIjoxNzQzNzM2OTAyfQ.Ox67UtgDCJSP5HJxb8L5Hafs_9nS13exH6L2GJgE334'
-const url_api = 'https://fake-api-vq1l.onrender.com/posts'
+const url_api = 'https://fake-api-vq1l.onrender.com'
 
 //botones
 const agregar = document.getElementById('crear');
+const crearcategoria = document.getElementById('crearCategoria');
 
-//listar
-fetch(url_api,{
+//listar productos
+fetch(url_api + '/posts',{
     headers: {
         "Authorization": autorizacion
     }
@@ -34,7 +35,31 @@ fetch(url_api,{
     });
         
 });
-        
+
+//listar categorias
+fetch(url_api + '/category',{
+    headers: {
+        "Authorization": autorizacion
+    }
+})
+.then(response => response.json())
+.then(data => {
+    const lista_categoria = document.getElementById('listaCategorias');
+    data.forEach( category => {
+        lista_categoria.innerHTML += 
+        `<li>
+            <div class="card">
+            <img src='${category.image}' class="card-img-top" width="160px">
+                <h3>${category.name}</h3>
+                <p>${category.description}</p>
+                <div>
+                    <button onclick='eliminarCategoria(${category.category_id})' id='eliminar'>Eliminar</button>
+                    <button onclick='actualizarCategoria(${category.category_id})' id='editar'>Editar</button>
+                </div>
+            </div>
+        </li>`;
+    })
+})
 //agregar
 agregar.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -44,10 +69,8 @@ agregar.addEventListener('submit', function(e) {
     let value = parseInt(document.getElementById('value').value);
     let category = parseInt(document.getElementById('category_id').value);
     let images = [document.getElementById('images').value];
-    let hola = ['hola', 'adios']
-    console.log(typeof(title), typeof(description), typeof(value), typeof(category), typeof(images), typeof(hola));
 
-    fetch(url_api, {
+    fetch(url_api + '/posts', {
         method: 'POST',
         headers: {
             "Authorization": autorizacion,
@@ -71,6 +94,36 @@ agregar.addEventListener('submit', function(e) {
     })
 })
 
+// crear categoría
+crearcategoria.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    let name = document.getElementById('categoria_nombre').value;
+    let description = document.getElementById('categoria_descripcion').value;
+    let image = document.getElementById('categoria_imagen').value;
+    fetch(url_api + '/category', {
+        method: 'POST',
+        headers: {
+            "Authorization": autorizacion,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: name,
+            image: image,
+            description: description
+        })
+    })
+    .then(response => response.json())
+    .then(response => {
+        console.log(response);
+        if(response) {
+            alert('Categoría creada');
+        }
+        location.reload();
+    })
+})
+
+
 //editar
 function editar(id){
 
@@ -80,7 +133,7 @@ function editar(id){
     let category = parseInt(prompt("Digite la nueva categoria"))
     let images = [prompt("Digite la nueva imagen")]
 
-    fetch(url_api + '/' + id, {
+    fetch(url_api + '/posts/' + id, {
         method: 'PATCH',
         headers: {
             "Authorization": autorizacion,
@@ -107,7 +160,7 @@ function editar(id){
 
 //borrar
 function borrar(id){
-    fetch(url_api + '/' + id, {
+    fetch(url_api + '/posts/' + id, {
         method: 'DELETE',
         headers: {
             "Authorization": autorizacion
@@ -123,50 +176,14 @@ function borrar(id){
     })
 }
 
-// crear categoría
-function crearCategoria(name, image, description) {
-    fetch(url_api, {
-        method: 'POST',
-        headers: {
-            "Authorization": autorizacion,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            name: name,
-            image: image,
-            description: description
-        })
-    })
-    .then(response => {
-        if(response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Error al crear la categoría');
-        }
-    })
-    .then(response => {
-        alert('Categoría creada');
-    })
-    .catch(error => console.error('Error al crear categoría:', error));
-}
-
-// obtener categoría por ID
-function obtenerCategoriaPorId(categoryId) {
-    fetch(`${url_api}/${categoryId}`, {
-        headers: {
-            "Authorization": autorizacion
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-    })
-    .catch(error => console.error('Error al obtener la categoría:', error));
-}
-
 // actualizar categoría por ID
-function actualizarCategoria(categoryId, name, image, description) {
-    fetch(`${url_api}/${categoryId}`, {
+function actualizarCategoria(id) {
+
+    let name = prompt("Digite el nuevo nombre");
+    let description = prompt("Digite la nueva descripción");
+    let image = prompt("Digite la nueva imagen");
+
+    fetch(url_api + '/category/' + id, {
         method: 'PATCH',
         headers: {
             "Authorization": autorizacion,
@@ -178,37 +195,34 @@ function actualizarCategoria(categoryId, name, image, description) {
             description: description
         })
     })
+    .then(response => response.json())
     .then(response => {
-        if(response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Error al actualizar la categoría');
+        console.log(response);
+        if(response){
+            alert('Producto actualizado');
         }
-
-    })
-    .then(response => {
-        alert('Categoría actualizada');
+        location.reload();
     })
     .catch(error => console.error('Error al actualizar la categoría:', error));
 }
 
 // eliminar categoría por ID
-function eliminarCategoria(categoryId) {
-    fetch(`${url_api}/${categoryId}`, {
+function eliminarCategoria(id) {
+    alert('eliminar');
+    fetch(url_api + '/category/' + id, {
         method: 'DELETE',
         headers: {
             "Authorization": autorizacion
         }
     })
+    .then(response => response.json())
     .then(response => {
-        if(response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Error al eliminar la categoría');
+        console.log(response);
+        if(response){
+            alert('Producto eliminado');
         }
+        location.reload();
     })
-    .then(response => {
-        alert('Categoría eliminada');
-    })
+
     .catch(error => console.error('Error al eliminar la categoría:', error));
 }
