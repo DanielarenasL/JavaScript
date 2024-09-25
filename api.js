@@ -125,7 +125,7 @@ function borrar(id){
 
 // crear categoría
 function crearCategoria(name, image, description) {
-    fetch(url_category_api, {
+    fetch(url_api, {
         method: 'POST',
         headers: {
             "Authorization": autorizacion,
@@ -152,7 +152,7 @@ function crearCategoria(name, image, description) {
 
 // obtener categoría por ID
 function obtenerCategoriaPorId(categoryId) {
-    fetch(`${url_category_api}/${categoryId}`, {
+    fetch(`${url_api}/${categoryId}`, {
         headers: {
             "Authorization": autorizacion
         }
@@ -166,7 +166,7 @@ function obtenerCategoriaPorId(categoryId) {
 
 // actualizar categoría por ID
 function actualizarCategoria(categoryId, name, image, description) {
-    fetch(`${url_category_api}/${categoryId}`, {
+    fetch(`${url_api}/${categoryId}`, {
         method: 'PATCH',
         headers: {
             "Authorization": autorizacion,
@@ -194,7 +194,7 @@ function actualizarCategoria(categoryId, name, image, description) {
 
 // eliminar categoría por ID
 function eliminarCategoria(categoryId) {
-    fetch(`${url_category_api}/${categoryId}`, {
+    fetch(`${url_api}/${categoryId}`, {
         method: 'DELETE',
         headers: {
             "Authorization": autorizacion
