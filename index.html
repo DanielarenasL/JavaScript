@@ -1,44 +1,66 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <link rel="stylesheet" href="./styles.css">
-        
-    </head>
-    <body>
-        <h1>Prueba Api</h1>
-        <div class="form">
-            <form id="crear">
-                <div class="campos-crear">
-                    <label for="title">Title</label>
-                    <input type="text" id="title" required><br>
-        
-                    <label for="description">Description</label>
-                    <input type="text" id="description"  required><br>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <h1>Prueba Api</h1>
     
-                    <label for="value">Value</label>
-                    <input type="number" id="value" min="1" required><br>
+    <!-- crar productos -->
+    <div class="form">
+        <form id="crear">
+            <div class="campos-crear">
+                <label for="title">Title</label>
+                <input type="text" id="title" required><br>
+
+                <label for="description">Description</label>
+                <input type="text" id="description" required><br>
+
+                <label for="value">Value</label>
+                <input type="number" id="value" min="1" required><br>
+
+                <label for="category_id">Categoría</label>
+                <input type="number" id="category_id" min="1" required><br>
+
+                <label for="images">Images</label>
+                <input type="text" id="images" required>
+
+                <button type="submit" class="submit">Agregar Producto</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- crear categorías -->
+    <div class="form">
+        <form id="crearCategoria">
+            <div class="campos-crear">
+                <label for="categoria_nombre">Title</label>
+                <input type="text" id="categoria_nombre" required><br>
+
+                <label for="categoria_imagen">Image</label>
+                <input type="text" id="categoria_imagen" required><br>
+
+                <label for="categoria_descripcion">Description</label>
+                <input type="text" id="categoria_descripcion" required><br>
+
+                <button type="submit" class="submit">Agregar Categoría</button>
+            </div>
+        </form>
+    </div>
     
-                    <label for="category_id">Categoriy</label>
-                    <input type="number"  id="category_id" min="1" required><br>
-    
-                    <label for="images">Images</label>
-                    <input type="text" id="images" required>
-    
-                    <button type="submit" class="submit">Agregar</button>
-                </div>
-                
-    
-            </form>
-        </div>
-        <div class="scrolleable">
-            <ul id="lista" >
-            </ul>
-        </div>
-        
-        
-        <script src="api.js"></script>
-    </body>
+    <!-- lista productos -->
+    <div class="scrolleable">
+        <ul id="lista"></ul>
+    </div>
+
+    <!-- list categorías -->
+    <div class="scrolleable">
+        <ul id="listaCategorias"></ul>
+    </div>
+
+    <script src="api.js"></script>
+</body>
 </html>

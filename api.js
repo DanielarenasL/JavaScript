@@ -4,6 +4,7 @@ const url_api = 'https://fake-api-vq1l.onrender.com/posts'
 
 //botones
 const agregar = document.getElementById('crear');
+
 //listar
 fetch(url_api,{
     headers: {
@@ -120,4 +121,94 @@ function borrar(id){
         }
         location.reload();
     })
+}
+
+// crear categoría
+function crearCategoria(name, image, description) {
+    fetch(url_category_api, {
+        method: 'POST',
+        headers: {
+            "Authorization": autorizacion,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: name,
+            image: image,
+            description: description
+        })
+    })
+    .then(response => {
+        if(response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Error al crear la categoría');
+        }
+    })
+    .then(response => {
+        alert('Categoría creada');
+    })
+    .catch(error => console.error('Error al crear categoría:', error));
+}
+
+// obtener categoría por ID
+function obtenerCategoriaPorId(categoryId) {
+    fetch(`${url_category_api}/${categoryId}`, {
+        headers: {
+            "Authorization": autorizacion
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => console.error('Error al obtener la categoría:', error));
+}
+
+// actualizar categoría por ID
+function actualizarCategoria(categoryId, name, image, description) {
+    fetch(`${url_category_api}/${categoryId}`, {
+        method: 'PATCH',
+        headers: {
+            "Authorization": autorizacion,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: name,
+            image: image,
+            description: description
+        })
+    })
+    .then(response => {
+        if(response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Error al actualizar la categoría');
+        }
+
+    })
+    .then(response => {
+        alert('Categoría actualizada');
+    })
+    .catch(error => console.error('Error al actualizar la categoría:', error));
+}
+
+// eliminar categoría por ID
+function eliminarCategoria(categoryId) {
+    fetch(`${url_category_api}/${categoryId}`, {
+        method: 'DELETE',
+        headers: {
+            "Authorization": autorizacion
+        }
+    })
+    .then(response => {
+        if(response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Error al eliminar la categoría');
+        }
+    })
+    .then(response => {
+        alert('Categoría eliminada');
+    })
+    .catch(error => console.error('Error al eliminar la categoría:', error));
 }
