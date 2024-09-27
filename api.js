@@ -17,7 +17,6 @@ fetch(url_api + '/posts',{
 
     const lista = document.getElementById('lista');
     data.forEach( product => {
-
         lista.innerHTML += 
         `<li>
             <img src='${product.images.replace(/["\[\]]/g, '')}' class="card-img-top" width="160px>

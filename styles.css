@@ -1,5 +1,5 @@
 body{
-    background-image: url('https://i.postimg.cc/3w7YWMRP/imagen-2024-09-16-234606230.png');
+    background-image: url('https://i.postimg.cc/HnmtTzy2/imagen-2024-09-27-163653251-transformed.png');
     background-attachment: fixed;
     background-size: cover;
 }   
@@ -103,6 +103,19 @@ li div{
 
 input {
     width: 200px; 
+    height: 30px; 
+    border-radius: 5px;
+    border: 2px solid var(--main-color);
+    background-color: var(--bg-color);
+    box-shadow: 4px 4px var(--main-color);
+    font-size: 13px; 
+    font-weight: 600;
+    color: var(--font-color);
+    padding: 5px 8px;
+    outline: none;
+}
+select {
+    width: 220px; 
     height: 30px; 
     border-radius: 5px;
     border: 2px solid var(--main-color);
