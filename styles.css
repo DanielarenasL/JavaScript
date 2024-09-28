@@ -46,12 +46,9 @@ li h3{
 li p{
     margin: 5px;
 }
-
-
 li div{
     margin: 10px;
 }
-
 .formularios{
     display: flex;
 
@@ -59,8 +56,6 @@ li div{
     justify-content: center;
     gap: 10px;
 }
-
-
 .form {
     --input-focus: #2d8cf0;
     --font-color: #323232;
@@ -140,9 +135,6 @@ select {
     color: var(--font-color);
     cursor: pointer;
 }
-
-
-
 .form .campos-crear{
     display: flex;
     flex-direction: column;

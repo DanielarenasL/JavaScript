@@ -9,24 +9,23 @@
     <body>
         <h1>Prueba Api</h1>
         <div class="formularios">
-            <!-- crar productos -->
+            <!-- Crear productos -->
             <div class="form">
                 <form id="crear">
                     <div class="campos-crear">
                         <h2>Crear producto</h2>
                         <label for="title">Title</label>
-                        <input type="text" id="title" placeholder="Ingrese el titulo" required><br>
+                        <input type="text" id="title" placeholder="Ingrese el título" required><br>
                     
                         <label for="description">Description</label>
-                        <input type="text" id="description" placeholder="Ingrese la description" required><br>
+                        <input type="text" id="description" placeholder="Ingrese la descripción" required><br>
                     
                         <label for="value">Value</label>
                         <input type="number" id="value" min="1" placeholder="Ingrese el valor" required><br>
                     
                         <label for="category_id">Category</label>
-                        <select name="categoria" id="category_id" required><br>
-
-                        </select>
+                        <select name="categoria" id="category_id" required>
+                        </select><br>
                     
                         <label for="images">Images</label>
                         <input type="text" id="images" placeholder="Ingrese la url de la imagen" required>
@@ -35,19 +34,19 @@
                     </div>
                 </form>
             </div>
-            <!-- crear categorías -->
+            <!-- Crear categorías -->
             <div class="form" id="hidden">
                 <form id="crearCategoria">
                     <div class="campos-crear">
-                        <h2>Crear categoria</h2>
+                        <h2>Crear categoría</h2>
                         <label for="categoria_nombre">Title</label>
-                        <input type="text" id="categoria_nombre" placeholder="Ingrese el nombre de la categoria" required><br>
+                        <input type="text" id="categoria_nombre" placeholder="Ingrese el nombre de la categoría" required><br>
 
                         <label for="categoria_imagen">Image</label>
                         <input type="text" id="categoria_imagen" placeholder="Ingrese la url de la imagen" required><br>
 
                         <label for="categoria_descripcion">Description</label>
-                        <input type="text" id="categoria_descripcion" placeholder="Ingrese la descripcion de la categoria" required><br>
+                        <input type="text" id="categoria_descripcion" placeholder="Ingrese la descripción de la categoría" required><br>
 
                         <button type="submit" class="submit">Agregar Categoría</button>
                     </div>
@@ -56,14 +55,14 @@
         </div>
         
         <div class="contenedor">
-            <!-- lista productos -->
+            <!-- Lista de productos -->
             <div class="productos">
                 <h2>Productos</h2>
                 <ul id="lista"></ul>
             </div>
-            <!-- list categorías -->
+            <!-- Lista de categorías -->
             <div class="categorias">
-                <h2>Categorias</h2>
+                <h2>Categorías</h2>
                 <ul id="listaCategorias"></ul>
             </div>
         </div>
