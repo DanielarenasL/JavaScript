@@ -14,6 +14,7 @@ fetch(url_api + '/posts', {
 })
 .then(response => response.json())
 .then(data => {
+    
     const lista = document.getElementById('lista');
     lista.innerHTML = '';
     data.forEach(product => {
@@ -284,6 +285,10 @@ function editarProducto(id, titulo, descripcion, image, valor, categoria) {
     valueInput.value = valor;
 
     const categorySelect = document.createElement('select');
+
+    const imgInput = document.createElement('input');
+    imgInput.placeholder = "nueva imagen";
+    imgInput.value = image;
     
     // Obtener categorías
     fetch(url_api + '/category', {
@@ -311,7 +316,7 @@ function editarProducto(id, titulo, descripcion, image, valor, categoria) {
         const updatedDescription = descriptionInput.value;
         const updatedValue = parseInt(valueInput.value);
         const updatedCategory = parseInt(categorySelect.value);
-        const updatedImages = JSON.parse(image);
+        const updatedImages = imgInput.value;
 
         fetch(url_api + '/posts/' + id, {
             method: 'PATCH',
@@ -344,6 +349,7 @@ function editarProducto(id, titulo, descripcion, image, valor, categoria) {
     modal.appendChild(descriptionInput);
     modal.appendChild(valueInput);
     modal.appendChild(categorySelect);
+    modal.appendChild(imgInput);
     modal.appendChild(submitButton);
     
     // Agregar el modal al body
