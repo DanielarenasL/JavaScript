@@ -35,7 +35,7 @@ fetch(url_api + '/posts', {
                 <p>Categoría: ${nombreCategoria || 'Categoría no encontrada'}</p>
                 <div>
                     <button onclick='borrar(${product.id})' id='eliminar'>Eliminar</button>
-                    <button onclick='editar(${product.id}, "${product.title}", "${product.description}", ${JSON.stringify(product.images)}, ${product.value}, ${product.category_id})' id='editar'>Editar</button>
+                    <button onclick='editarProducto(${product.id}, "${product.title}", "${product.description}", ${JSON.stringify(product.images)}, ${product.value}, ${product.category_id})' id='editar'>Editar</button>
                 </div>
             </div>
         </li>`;
@@ -256,7 +256,99 @@ function cargarCategorias() {
         console.error('Error al cargar las categorías:', error);
     });
 }
+function editarProducto(id, titulo, descripcion, image, valor, categoria) {
+    // Crear el modal
+    const modal = document.createElement('div');
+    modal.style.position = 'fixed';
+    modal.style.top = '50%';
+    modal.style.left = '50%';
+    modal.style.transform = 'translate(-50%, -50%)';
+    modal.style.backgroundColor = 'lightgrey'; // Color del modal
+    modal.style.padding = '20px';
+    modal.style.zIndex = '1000';
+    modal.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+    modal.style.borderRadius = '10px'; // Bordes redondeados
 
+    // Crear los campos de entrada
+    const titleInput = document.createElement('input');
+    titleInput.placeholder = "Nuevo Título";
+    titleInput.value = titulo;
+
+    const descriptionInput = document.createElement('input');
+    descriptionInput.placeholder = "Nueva Descripción";
+    descriptionInput.value = descripcion;
+
+    const valueInput = document.createElement('input');
+    valueInput.type = "number";
+    valueInput.placeholder = "Nuevo Valor";
+    valueInput.value = valor;
+
+    const categorySelect = document.createElement('select');
+    
+    // Obtener categorías
+    fetch(url_api + '/category', {
+        headers: {
+            "Authorization": autorizacion
+        }
+    })
+    .then(response => response.json())
+    .then(categories => {
+        categories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat.category_id;
+            option.text = cat.name;
+            if (cat.category_id === categoria) {
+                option.selected = true; // Seleccionar la categoría actual
+            }
+            categorySelect.appendChild(option);
+        });
+    });
+
+    const submitButton = document.createElement('button');
+    submitButton.innerText = 'Actualizar Producto';
+    submitButton.onclick = function() {
+        const updatedTitle = titleInput.value;
+        const updatedDescription = descriptionInput.value;
+        const updatedValue = parseInt(valueInput.value);
+        const updatedCategory = parseInt(categorySelect.value);
+        const updatedImages = JSON.parse(image);
+
+        fetch(url_api + '/posts/' + id, {
+            method: 'PATCH',
+            headers: {
+                "Authorization": autorizacion,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                title: updatedTitle,
+                description: updatedDescription,
+                value: updatedValue,
+                category_id: updatedCategory,
+                images: updatedImages
+            })
+        })
+        .then(response => response.json())
+        .then(response => {
+            console.log(response);
+            if (response) {
+                alert('Producto actualizado');
+            }
+            location.reload();
+        });
+
+        document.body.removeChild(modal); // Cerrar modal
+    };
+
+    // Agregar campos al modal
+    modal.appendChild(titleInput);
+    modal.appendChild(descriptionInput);
+    modal.appendChild(valueInput);
+    modal.appendChild(categorySelect);
+    modal.appendChild(submitButton);
+    
+    // Agregar el modal al body
+    document.body.appendChild(modal);
+}
 // Inicializar carga de categorías
 document.addEventListener('DOMContentLoaded', function() {
     cargarCategorias();
