@@ -18,7 +18,7 @@ fetch(url_api + '/posts', {
     const lista = document.getElementById('lista');
     lista.innerHTML = '';
     data.forEach(product => {
-        console.log(`Product ID: ${product.id}, Category ID: ${product.category_id}`);
+        console.log(typeof(product.image));
 
         const nombreCategoria = categorias[product.category_id];
         
@@ -77,7 +77,7 @@ agregar.addEventListener('submit', function(e) {
     let description = document.getElementById('description').value;
     let value = parseInt(document.getElementById('value').value);
     let category = parseInt(document.getElementById('category_id').value);
-    let images = [document.getElementById('images').value];
+    let images = JSON.parse(document.getElementById('images').value);
 
     fetch(url_api + '/posts', {
         method: 'POST',
@@ -90,7 +90,7 @@ agregar.addEventListener('submit', function(e) {
             description: description,
             value: value,
             category_id: category,
-            images: images
+            images: Array.isArray(images) ? images : [images]
         })
     })
     .then(response => response.json())
@@ -288,7 +288,7 @@ function editarProducto(id, titulo, descripcion, image, valor, categoria) {
 
     const imgInput = document.createElement('input');
     imgInput.placeholder = "nueva imagen";
-    imgInput.value = image;
+    imgInput.value = JSON.parse(image)[0];
     
     // Obtener categorías
     fetch(url_api + '/category', {
@@ -329,7 +329,7 @@ function editarProducto(id, titulo, descripcion, image, valor, categoria) {
                 description: updatedDescription,
                 value: updatedValue,
                 category_id: updatedCategory,
-                images: updatedImages
+                images: [updatedImages]
             })
         })
         .then(response => response.json())
