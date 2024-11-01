@@ -15,12 +15,13 @@ li{
     text-align: center;
     height: 378px;
     background-color: rgb(173, 70, 233);
-    width: 20em;
+    width: auto;
     margin: 30px;
 }
 li img{
     margin: 10px;
-    width: 60%;
+    width: 70%;
+    height: 55%;
 }
 li #eliminar{
     border-color: #ff0000;
