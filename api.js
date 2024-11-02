@@ -5,38 +5,35 @@ const url_api = 'https://api-qxlr.onrender.com';
 const agregar = document.getElementById('crear');
 const crearcategoria = document.getElementById('crearCategoria');
 
-// Listar productos
-fetch(url_api + '/products')
-.then(response => response.json())
-.then(data => {
-    
-    const lista = document.getElementById('lista');
-    lista.innerHTML = '';
-    data.forEach(product => {
-        console.log(typeof(product.images));
+// Función para listar productos
+function listarProductos() {
+    fetch(url_api + '/products')
+    .then(response => response.json())
+    .then(data => {
+        const lista = document.getElementById('lista');
+        lista.innerHTML = '';
+        data.forEach(product => {
+            // Verificar si el campo category_id es nulo o vacío
+            const categoria = product.category_id ? product.category_id : "Sin categoría";
 
-        const nombreCategoria = categorias[product.category_id];
-        
-        if (!nombreCategoria) {
-            console.log(`Categoría no encontrada para el ID: ${product.category_id}`);
-        }
-
-        lista.innerHTML += 
-        `<li>
-            <img src='${product.images.replace(/["\[\]]/g, '')}' class="card-img-top" width="160px">
-            <div class="card">
-                <h3>${product.title}</h3>
-                <p>${product.description}</p>
-                <p>${product.value}</p>
-                <p>Categoría: ${nombreCategoria || 'Categoría no encontrada'}</p>
-                <div>
-                    <button onclick='borrar(${product.id})' id='eliminar'>Eliminar</button>
-                    <button onclick='editarProducto(${product.id}, "${product.title}", "${product.description}", ${JSON.stringify(product.images)}, ${product.value}, ${product.category_id})' id='editar'>Editar</button>
-                </div>
-            </div>
-        </li>`;
-    });
-});
+            lista.innerHTML += `
+                <li>
+                    <img src='${product.images.replace(/["\[\]]/g, '')}' class="card-img-top" width="160px">
+                    <div class="card">
+                        <h3>${product.title}</h3>
+                        <p>${product.description}</p>
+                        <p>${product.value}</p>
+                        <p>Categoría: ${categoria}</p>
+                        <div>
+                            <button onclick='borrar(${product._id})' id='eliminar'>Eliminar</button>
+                            <button onclick='editarProducto(${product._id}, "${product.title}", "${product.description}", "${product.images.replace(/["\[\]]/g, '')}", ${product.value}, ${categoria})' id='editar'>Editar</button>
+                        </div>
+                    </div>
+                </li>`;
+        });
+    })
+    .catch(error => console.error('Error al listar productos:', error));
+}
 
 // Listar categorias
 fetch(url_api + '/categories')
@@ -52,15 +49,15 @@ fetch(url_api + '/categories')
                 <h3>${category.name}</h3>
                 <p>${category.description}</p>
                 <div>
-                    <button onclick='eliminarCategoria(${category.category_id})' id='eliminar'>Eliminar</button>
-                    <button onclick='actualizarCategoria(${category.category_id}, "${category.name}", "${category.description}", "${category.image}")' id='editar'>Editar</button>
+                    <button onclick='eliminarCategoria(${category._id})' id='eliminar'>Eliminar</button>
+                    <button onclick='actualizarCategoria(${category._id}, "${category.name}", "${category.description}", "${category.image}")' id='editar'>Editar</button>
                 </div>
             </div>
         </li>`;
     });
 });
 
-// Agregar
+// Agregar producto
 agregar.addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -68,7 +65,7 @@ agregar.addEventListener('submit', function(e) {
     let description = document.getElementById('description').value;
     let value = parseInt(document.getElementById('value').value);
     let category = parseInt(document.getElementById('category_id').value);
-    let images = JSON.parse(document.getElementById('images').value);
+    let images = document.getElementById('images').value;
 
     fetch(url_api + '/products', {
         method: 'POST',
@@ -80,17 +77,17 @@ agregar.addEventListener('submit', function(e) {
             description: description,
             value: value,
             category_id: category,
-            images: Array.isArray(images) ? images : [images]
+            images: [images]
         })
     })
     .then(response => response.json())
     .then(response => {
-        console.log(response);
         if (response) {
-            alert('Producto creado');
+            alert('Producto creado exitosamente');
         }
         location.reload();
-    });
+    })
+    .catch(error => console.error('Error al crear el producto:', error));
 });
 
 // Crear categoría
@@ -123,37 +120,101 @@ crearcategoria.addEventListener('submit', function(e) {
 });
 
 // Editar
-function editar(id, titulo, descripcion, image, valor, categoria) {
-    
-    let title = prompt("Digite el nuevo título", titulo);
-    let description = prompt("Digite la nueva descripción", descripcion);
-    let value = parseInt(prompt("Digite el nuevo valor", valor));
-    let category = parseInt(prompt("Digite la nueva categoría", categoria));
-    let images = JSON.parse(image); // Parsear la cadena JSON
-    images = [prompt("Digite la nueva imagen", images[0])]; 
+function editarProducto(id, titulo, descripcion, image, valor, categoria) {
+    // Crear el modal
+    const modal = document.createElement('div');
+    modal.style.position = 'fixed';
+    modal.style.top = '50%';
+    modal.style.left = '50%';
+    modal.style.transform = 'translate(-50%, -50%)';
+    modal.style.backgroundColor = 'lightgrey';
+    modal.style.padding = '20px';
+    modal.style.zIndex = '1000';
+    modal.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+    modal.style.borderRadius = '10px';
 
-    fetch(url_api + '/products/' + id, {
-        method: 'PATCH',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            title: title,
-            description: description,
-            value: value,
-            category_id: category,
-            images: images
-        })
-    })
+    // Crear los campos de entrada
+    const titleInput = document.createElement('input');
+    titleInput.placeholder = "Nuevo Título";
+    titleInput.value = titulo;
+
+    const descriptionInput = document.createElement('input');
+    descriptionInput.placeholder = "Nueva Descripción";
+    descriptionInput.value = descripcion;
+
+    const valueInput = document.createElement('input');
+    valueInput.type = "number";
+    valueInput.placeholder = "Nuevo Valor";
+    valueInput.value = valor;
+
+    const categorySelect = document.createElement('select');
+
+    const imgInput = document.createElement('input');
+    imgInput.placeholder = "nueva imagen";
+    imgInput.value = image; // Usar el valor de imagen como cadena
+    
+    // Obtener categorías
+    fetch(url_api + '/categories')
     .then(response => response.json())
-    .then(response => {
-        console.log(response);
-        if (response) {
-            alert('Producto actualizado');
-        }
-        location.reload();
+    .then(categories => {
+        categories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat.category_id;
+            option.text = cat.name;
+            if (cat.category_id === categoria) {
+                option.selected = true;
+            }
+            categorySelect.appendChild(option);
+        });
     });
+
+    const submitButton = document.createElement('button');
+    submitButton.innerText = 'Actualizar Producto';
+    submitButton.onclick = function() {
+        const updatedTitle = titleInput.value;
+        const updatedDescription = descriptionInput.value;
+        const updatedValue = parseInt(valueInput.value);
+        const updatedCategory = parseInt(categorySelect.value);
+        const updatedImages = imgInput.value; // Usar como cadena directamente
+
+        fetch(url_api + '/products/' + id, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                title: updatedTitle,
+                description: updatedDescription,
+                value: updatedValue,
+                category_id: updatedCategory,
+                images: updatedImages // Enviar como string
+            })
+        })
+        .then(response => response.json())
+        .then(response => {
+            console.log(response);
+            if (response) {
+                alert('Producto actualizado');
+            }
+            location.reload();
+        })
+        .catch(error => console.error('Error al actualizar el producto:', error));
+
+        document.body.removeChild(modal); // Cerrar modal
+    };
+
+    // Agregar campos al modal
+    modal.appendChild(titleInput);
+    modal.appendChild(descriptionInput);
+    modal.appendChild(valueInput);
+    modal.appendChild(categorySelect);
+    modal.appendChild(imgInput);
+    modal.appendChild(submitButton);
+    
+    // Agregar el modal al body
+    document.body.appendChild(modal);
 }
+
 
 // Borrar
 function borrar(id) {
@@ -234,6 +295,7 @@ function cargarCategorias() {
         console.error('Error al cargar las categorías:', error);
     });
 }
+
 function editarProducto(id, titulo, descripcion, image, valor, categoria) {
     // Crear el modal
     const modal = document.createElement('div');
