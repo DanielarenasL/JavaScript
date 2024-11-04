@@ -1,62 +1,75 @@
-body{
+body {
     background-image: url('https://i.postimg.cc/HnmtTzy2/imagen-2024-09-27-163653251-transformed.png');
     background-attachment: fixed;
     background-size: cover;
-}   
-h1{
+}
+
+h1 {
     display: flex;
-    position: center;
     justify-content: center;
 }
-li{
+
+li {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    height: 378px;
-    background-color: rgb(173, 70, 233);
-    width: auto;
+    height: 378px; /* Altura de las tarjetas */
+    background-color: rgb(173, 70, 233); /* Color original de las tarjetas */
+    width: 250px; /* Ancho de las tarjetas */
     margin: 30px;
+    overflow: hidden; /* Evita que el texto se desborde del contenedor */
 }
-li img{
+
+li img {
     margin: 10px;
-    width: 70%;
-    height: 55%;
+    width: 100%; /* Ancho de la imagen ajustado al contenedor */
+    height: auto; /* Altura automática para mantener la proporción */
+    max-height: 150px; /* Altura máxima para las imágenes */
+    object-fit: contain; /* Mantiene la relación de aspecto sin recortar */
 }
-li #eliminar{
+
+li #eliminar {
     border-color: #ff0000;
     border-radius: 5px;
     height: 30px;
     width: auto;
 }
-li #eliminar:hover{
+
+li #eliminar:hover {
     background-color: #ff0000;
 }
+
 li #editar {
     border-color: #287fe2;
     border-radius: 5px;
     height: 30px;
     width: auto;
 }
-li #editar:hover{
+
+li #editar:hover {
     background-color: #287fe2;
 }
-li h3{
+
+li h3 {
     margin: 5px;
 }
-li p{
+
+li p {
     margin: 5px;
 }
-li div{
+
+li div {
     margin: 10px;
 }
-.formularios{
-    display: flex;
 
+.formularios {
+    display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
 }
+
 .form {
     --input-focus: #2d8cf0;
     --font-color: #323232;
@@ -74,30 +87,28 @@ li div{
     border: 2px solid var(--main-color);
     box-shadow: 4px 4px var(--main-color);
     width: 400px;
-    border: 2px solid transparent;
-    padding: 32px 24px;
-    font-family: inherit;
-    box-sizing: border-box;
     margin: 30px;
-
 }
+
 .form h2 {
     display: flex;
     justify-content: center;
 }
+
 .title {
     color: var(--font-color);
     font-weight: 900;
     font-size: 16px; 
     margin-bottom: 15px; 
 }
+
 .title span {
     color: var(--font-color-sub);
     font-weight: 600;
     font-size: 14px; 
 }
 
-input {
+input, select {
     width: 200px; 
     height: 30px; 
     border-radius: 5px;
@@ -110,20 +121,8 @@ input {
     padding: 5px 8px;
     outline: none;
 }
-select {
-    width: 220px; 
-    height: 30px; 
-    border-radius: 5px;
-    border: 2px solid var(--main-color);
-    background-color: var(--bg-color);
-    box-shadow: 4px 4px var(--main-color);
-    font-size: 13px; 
-    font-weight: 600;
-    color: var(--font-color);
-    padding: 5px 8px;
-    outline: none;
-}
-.submit{
+
+.submit {
     margin: 30px auto 0 auto;
     width: 100px; 
     height: 35px; 
@@ -136,14 +135,14 @@ select {
     color: var(--font-color);
     cursor: pointer;
 }
-.form .campos-crear{
+
+.form .campos-crear {
     display: flex;
     flex-direction: column;
     gap: 2px;
 }
 
-
-.form .campos-crear input:focus{
+.form .campos-crear input:focus {
     outline: none;
     border-color: #e81cff;
 }
@@ -151,166 +150,43 @@ select {
 .form .submit:hover {
     background-color: #fff;
     border-color: #fff;
-  }
+}
 
-  .contenedor {
+.contenedor {
     display: flex;
     justify-content: center;
-  }
-.productos {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
-.productos h2{
-    font-size: 30px;
-}
-.categorias {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.categorias h2{
-    font-size: 30px;
-}
-@keyframes square-animation {
-    0% {
-     left: 0;
-     top: 0;
-    }
-   
-    10.5% {
-     left: 0;
-     top: 0;
-    }
-   
-    12.5% {
-     left: 32px;
-     top: 0;
-    }
-   
-    23% {
-     left: 32px;
-     top: 0;
-    }
-   
-    25% {
-     left: 64px;
-     top: 0;
-    }
-   
-    35.5% {
-     left: 64px;
-     top: 0;
-    }
-   
-    37.5% {
-     left: 64px;
-     top: 32px;
-    }
-   
-    48% {
-     left: 64px;
-     top: 32px;
-    }
-   
-    50% {
-     left: 32px;
-     top: 32px;
-    }
-   
-    60.5% {
-     left: 32px;
-     top: 32px;
-    }
-   
-    62.5% {
-     left: 32px;
-     top: 64px;
-    }
-   
-    73% {
-     left: 32px;
-     top: 64px;
-    }
-   
-    75% {
-     left: 0;
-     top: 64px;
-    }
-   
-    85.5% {
-     left: 0;
-     top: 64px;
-    }
-   
-    87.5% {
-     left: 0;
-     top: 32px;
-    }
-   
-    98% {
-     left: 0;
-     top: 32px;
-    }
-   
-    100% {
-     left: 0;
-     top: 0;
-    }
-   }
-   
-   .loader {
-    width: 96px;
-    height: 96px;
-    transform: rotate(45deg);
-    margin-left: 46%;
 
-   }
-   
-   .loader-square {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 28px;
-    height: 28px;
-    margin: 2px;
-    border-radius: 0px;
-    background: white;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    animation: square-animation 10s ease-in-out infinite both;
-   }
-   
-   .loader-square:nth-of-type(0) {
-    animation-delay: 0s;
-   }
-   
-   .loader-square:nth-of-type(1) {
-    animation-delay: -1.4285714286s;
-   }
-   
-   .loader-square:nth-of-type(2) {
-    animation-delay: -2.8571428571s;
-   }
-   
-   .loader-square:nth-of-type(3) {
-    animation-delay: -4.2857142857s;
-   }
-   
-   .loader-square:nth-of-type(4) {
-    animation-delay: -5.7142857143s;
-   }
-   
-   .loader-square:nth-of-type(5) {
-    animation-delay: -7.1428571429s;
-   }
-   
-   .loader-square:nth-of-type(6) {
-    animation-delay: -8.5714285714s;
-   }
-   
-   .loader-square:nth-of-type(7) {
-    animation-delay: -10s;
-   }
+.productos, .categorias {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.productos h2, .categorias h2 {
+    font-size: 30px;
+}
+
+.categorias li {
+    height: 378px; /* Altura igual a productos */
+    width: 250px; /* Ancho igual a productos */
+}
+
+.categorias li img {
+    margin: 10px;
+    width: 100%; /* Ancho igual al de productos */
+    height: auto; /* Altura automática para mantener la proporción */
+    max-height: 150px; /* Altura máxima para las imágenes */
+    object-fit: contain; /* Mantiene la relación de aspecto sin recortar */
+}
+
+@keyframes square-animation {
+}
+
+.loader {
+    display: none;
+}
+
+.loader-square {
+    display: none;
+}

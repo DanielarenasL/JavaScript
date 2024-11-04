@@ -8,25 +8,37 @@ const crearcategoria = document.getElementById('crearCategoria');
 // Función para listar productos
 function listarProductos() {
     fetch(url_api + '/products')
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de la API');
+        }
+        return response.json();
+    })
     .then(data => {
         const lista = document.getElementById('lista');
-        lista.innerHTML = '';
+        lista.innerHTML = ''; // Limpiar la lista antes de llenarla
+        if (data.length === 0) {
+            lista.innerHTML = '<p>No hay productos disponibles.</p>';
+            return; // Salir si no hay productos
+        }
         data.forEach(product => {
             // Verificar si el campo category_id es nulo o vacío
             const categoria = product.category_id ? product.category_id : "Sin categoría";
 
+            // Asegurarse de que product.images sea un array y tomar el primer elemento
+            const imageSrc = Array.isArray(product.images) ? product.images[0] : product.images;
+
             lista.innerHTML += `
                 <li>
-                    <img src='${product.images.replace(/["\[\]]/g, '')}' class="card-img-top" width="160px">
+                    <img src='${imageSrc.replace(/["\[\]]/g, '')}' class="card-img-top" width="160px">
                     <div class="card">
                         <h3>${product.title}</h3>
                         <p>${product.description}</p>
-                        <p>${product.value}</p>
+                        <p>Precio: $${product.value}</p>
                         <p>Categoría: ${categoria}</p>
                         <div>
                             <button onclick='borrar(${product._id})' id='eliminar'>Eliminar</button>
-                            <button onclick='editarProducto(${product._id}, "${product.title}", "${product.description}", "${product.images.replace(/["\[\]]/g, '')}", ${product.value}, ${categoria})' id='editar'>Editar</button>
+                            <button onclick='editarProducto(${product._id}, "${product.title}", "${product.description}", "${imageSrc.replace(/["\[\]]/g, '')}", ${product.value}, ${categoria})' id='editar'>Editar</button>
                         </div>
                     </div>
                 </li>`;
@@ -35,7 +47,13 @@ function listarProductos() {
     .catch(error => console.error('Error al listar productos:', error));
 }
 
-// Listar categorias
+// Llamar a listarProductos al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    listarProductos();
+    cargarCategorias(); // También carga categorías
+});
+
+// Listar categorías
 fetch(url_api + '/categories')
 .then(response => response.json())
 .then(data => {
@@ -45,7 +63,7 @@ fetch(url_api + '/categories')
         lista_categoria.innerHTML += 
         `<li>
             <div class="card">
-                <img src='${category.image}' class="card-img-top" width="160px">
+                <img src='${category.image}' class="card-img-top">
                 <h3>${category.name}</h3>
                 <p>${category.description}</p>
                 <div>
@@ -275,26 +293,36 @@ function eliminarCategoria(id) {
     .catch(error => console.error('Error al eliminar la categoría:', error));
 }
 
-// Cargar categorías
-let categorias = {};
+// Cargar Categorias
 function cargarCategorias() {
     fetch(url_api + '/categories')
-    .then(response => response.json())
-    .then(data => {
-        const categorySelect = document.getElementById('category_id');
-        data.forEach(categoria => {
-            categorias[categoria.category_id] = categoria.name;
+        .then(response => response.json())
+        .then(data => {
+            console.log('Categorías recibidas:', data);
+            
+            const categorySelect = document.getElementById('category_id');
+            categorySelect.innerHTML = ''; // Limpia las opciones existentes
 
-            let option = document.createElement('option');
-            option.value = categoria.category_id;
-            option.text = categoria.name;
-            categorySelect.appendChild(option);
+            const uniqueCategories = new Set();
+
+            data.forEach(categoria => {
+                console.log('Agregando categoría:', categoria); 
+                if (!uniqueCategories.has(categoria._id)) { // Asegúrate de usar el _id correcto
+                    uniqueCategories.add(categoria._id);
+                    let option = document.createElement('option');
+                    option.value = categoria._id; // Usa el ID de categoría
+                    option.text = categoria.name; // Usa el nombre de la categoría
+                    categorySelect.appendChild(option); // Agregar la opción al select
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error al cargar las categorías:', error);
         });
-    })
-    .catch(error => {
-        console.error('Error al cargar las categorías:', error);
-    });
 }
+
+// Llama a la función cuando el documento esté listo
+document.addEventListener('DOMContentLoaded', cargarCategorias);
 
 function editarProducto(id, titulo, descripcion, image, valor, categoria) {
     // Crear el modal
