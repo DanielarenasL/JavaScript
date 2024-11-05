@@ -23,10 +23,8 @@ function listarProductos() {
         }
         data.forEach(product => {
             // Verificar si el campo category_id es nulo o vacío
-            const categoria = product.category_id ? product.category_id : "Sin categoría";
-
-            // Asegurarse de que product.images sea un array y tomar el primer elemento
-            const imageSrc = Array.isArray(product.images) ? product.images[0] : product.images;
+            const categoria = product.category_id ? String(product.category_id) : "Sin categoría";
+            const imageSrc = Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : product.images || 'default_image_url.jpg';
 
             lista.innerHTML += `
                 <li>
@@ -168,67 +166,90 @@ function editarProducto(id, titulo, descripcion, image, valor, categoria) {
     const categorySelect = document.createElement('select');
 
     const imgInput = document.createElement('input');
-    imgInput.placeholder = "nueva imagen";
-    imgInput.value = image; // Usar el valor de imagen como cadena
-    
-    // Obtener categorías
+    imgInput.placeholder = "Nueva Imagen (URL)";
+    imgInput.value = image;
+
+    // Obtener categorías para el select
     fetch(url_api + '/categories')
-    .then(response => response.json())
-    .then(categories => {
-        categories.forEach(cat => {
-            const option = document.createElement('option');
-            option.value = cat.category_id;
-            option.text = cat.name;
-            if (cat.category_id === categoria) {
-                option.selected = true;
-            }
-            categorySelect.appendChild(option);
+        .then(response => response.json())
+        .then(categories => {
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat._id;
+                option.text = cat.name;
+                if (cat._id === categoria) {
+                    option.selected = true;
+                }
+                categorySelect.appendChild(option);
+            });
         });
-    });
 
     const submitButton = document.createElement('button');
     submitButton.innerText = 'Actualizar Producto';
     submitButton.onclick = function() {
-        const updatedTitle = titleInput.value;
-        const updatedDescription = descriptionInput.value;
+        const updatedTitle = titleInput.value.trim();
+        const updatedDescription = descriptionInput.value.trim();
         const updatedValue = parseInt(valueInput.value);
-        const updatedCategory = parseInt(categorySelect.value);
-        const updatedImages = imgInput.value; // Usar como cadena directamente
+        const updatedCategory = categorySelect.value;
+        const updatedImage = imgInput.value.trim();
 
+        // Validaciones de los campos
+        if (!updatedTitle || !updatedDescription || !updatedValue || !updatedCategory || !updatedImage) {
+            alert("Todos los campos deben ser completados correctamente.");
+            return;
+        }
+
+        if (!updatedImage.startsWith("http")) {
+            alert("Por favor, ingresa una URL de imagen válida que comience con 'http'.");
+            return;
+        }
+
+        // Cambiar `images` a ser un solo string en lugar de un array
+        const productoActualizado = {
+            title: updatedTitle,
+            description: updatedDescription,
+            value: updatedValue,
+            category_id: updatedCategory,
+            images: updatedImage  // Usamos `images` como cadena de texto
+        };
+
+        console.log("Objeto para enviar:", JSON.stringify(productoActualizado));
+
+        // Enviar los datos actualizados a la API
         fetch(url_api + '/products/' + id, {
             method: 'PATCH',
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                title: updatedTitle,
-                description: updatedDescription,
-                value: updatedValue,
-                category_id: updatedCategory,
-                images: updatedImages // Enviar como string
-            })
+            body: JSON.stringify(productoActualizado)
         })
-        .then(response => response.json())
         .then(response => {
-            console.log(response);
-            if (response) {
-                alert('Producto actualizado');
+            if (!response.ok) {
+                throw new Error("Error en la solicitud de actualización");
             }
-            location.reload();
+            return response.json();
         })
-        .catch(error => console.error('Error al actualizar el producto:', error));
+        .then(response => {
+            console.log("Respuesta del servidor:", response);
+            alert('Producto actualizado exitosamente');
+            location.reload(); // Recargar la página para ver los cambios
+        })
+        .catch(error => {
+            console.error('Error al actualizar el producto:', error);
+            alert('Hubo un problema al actualizar el producto. Revisa la consola para más detalles.');
+        });
 
-        document.body.removeChild(modal); // Cerrar modal
+        document.body.removeChild(modal); // Cerrar el modal
     };
 
-    // Agregar campos al modal
+    // Agregar campos y botón al modal
     modal.appendChild(titleInput);
     modal.appendChild(descriptionInput);
     modal.appendChild(valueInput);
     modal.appendChild(categorySelect);
     modal.appendChild(imgInput);
     modal.appendChild(submitButton);
-    
+
     // Agregar el modal al body
     document.body.appendChild(modal);
 }
