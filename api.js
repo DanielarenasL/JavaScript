@@ -24,11 +24,10 @@ function listarProductos() {
         data.forEach(product => {
             // Verificar si el campo category_id es nulo o vacío
             const categoria = product.category_id ? String(product.category_id) : "Sin categoría";
-            const imageSrc = Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : product.images || 'default_image_url.jpg';
 
             lista.innerHTML += `
                 <li>
-                    <img src='${imageSrc.replace(/["\[\]]/g, '')}' class="card-img-top" width="160px">
+                    <img src='${product.images}' class="card-img-top" width="160px">
                     <div class="card">
                         <h3>${product.title}</h3>
                         <p>${product.description}</p>
@@ -36,7 +35,7 @@ function listarProductos() {
                         <p>Categoría: ${categoria}</p>
                         <div>
                             <button onclick='borrar(${product._id})' id='eliminar'>Eliminar</button>
-                            <button onclick='editarProducto(${product._id}, "${product.title}", "${product.description}", "${imageSrc.replace(/["\[\]]/g, '')}", ${product.value}, ${categoria})' id='editar'>Editar</button>
+                            <button onclick='editarProducto(${product._id}, "${product.title}", "${product.description}", "${product.images}", ${product.value}, ${categoria})' id='editar'>Editar</button>
                         </div>
                     </div>
                 </li>`;
@@ -66,7 +65,7 @@ fetch(url_api + '/categories')
                 <p>${category.description}</p>
                 <div>
                     <button onclick='eliminarCategoria(${category._id})' id='eliminar'>Eliminar</button>
-                    <button onclick='actualizarCategoria(${category._id}, "${category.name}", "${category.description}", "${category.image}")' id='editar'>Editar</button>
+                    <button onclick="actualizarCategoria(${category._id}, '${category.name}', '${category.description}', '${category.image}')" id='editar'>Editar</button>
                 </div>
             </div>
         </li>`;
@@ -93,7 +92,7 @@ agregar.addEventListener('submit', function(e) {
             description: description,
             value: value,
             category_id: category,
-            images: [images]
+            images: images
         })
     })
     .then(response => response.json())
@@ -164,13 +163,15 @@ function editarProducto(id, titulo, descripcion, image, valor, categoria) {
     valueInput.value = valor;
 
     const categorySelect = document.createElement('select');
+    alert(categorySelect)
 
     const imgInput = document.createElement('input');
     imgInput.placeholder = "Nueva Imagen (URL)";
     imgInput.value = image;
 
-    // Obtener categorías para el select
-    fetch(url_api + '/categories')
+    try {
+        // Obtener categorías para el select
+        fetch(url_api + '/categories')
         .then(response => response.json())
         .then(categories => {
             categories.forEach(cat => {
@@ -179,10 +180,18 @@ function editarProducto(id, titulo, descripcion, image, valor, categoria) {
                 option.text = cat.name;
                 if (cat._id === categoria) {
                     option.selected = true;
+                    alert('Categoria encontrada')
+                }else{
+                    alert('categoria no encontrada')
                 }
                 categorySelect.appendChild(option);
             });
         });
+        alert('encontrada')
+    } catch (error) {
+        alert("no encontrada")
+    }
+    
 
     const submitButton = document.createElement('button');
     submitButton.innerText = 'Actualizar Producto';
@@ -373,10 +382,11 @@ function editarProducto(id, titulo, descripcion, image, valor, categoria) {
     valueInput.value = valor;
 
     const categorySelect = document.createElement('select');
+    console.log(categorySelect);
 
     const imgInput = document.createElement('input');
     imgInput.placeholder = "nueva imagen";
-    imgInput.value = JSON.parse(image)[0];
+    //imgInput.value = JSON.parse(image)[0];
     
     // Obtener categorías
     fetch(url_api + '/categories')
@@ -411,7 +421,7 @@ function editarProducto(id, titulo, descripcion, image, valor, categoria) {
                 title: updatedTitle,
                 description: updatedDescription,
                 value: updatedValue,
-                category_id: updatedCategory,
+                category_id: parseInt(updatedCategory),
                 images: [updatedImages]
             })
         })
