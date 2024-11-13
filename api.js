@@ -134,7 +134,7 @@ crearcategoria.addEventListener('submit', function(e) {
     });
 });
 
-// Editar
+// Editar Producto
 function editarProducto(id, titulo, descripcion, image, valor, categoria) {
     // Crear el modal
     const modal = document.createElement('div');
@@ -163,35 +163,31 @@ function editarProducto(id, titulo, descripcion, image, valor, categoria) {
     valueInput.value = valor;
 
     const categorySelect = document.createElement('select');
-    alert(categorySelect)
-
     const imgInput = document.createElement('input');
     imgInput.placeholder = "Nueva Imagen (URL)";
     imgInput.value = image;
 
-    try {
-        // Obtener categorías para el select
-        fetch(url_api + '/categories')
+    // Cargar categorías para el select
+    fetch(url_api + '/categories')
         .then(response => response.json())
         .then(categories => {
             categories.forEach(cat => {
                 const option = document.createElement('option');
-                option.value = cat._id;
-                option.text = cat.name;
-                if (cat._id === categoria) {
+                option.value = cat._id; // ID de la categoría
+                option.text = cat.name; // Nombre de la categoría
+
+                // Verificar si la categoría actual es la que corresponde al producto
+                if (cat._id === parseInt(categoria)) {  // Comparar como números
                     option.selected = true;
-                    alert('Categoria encontrada')
-                }else{
-                    alert('categoria no encontrada')
                 }
+
                 categorySelect.appendChild(option);
             });
+        })
+        .catch(error => {
+            console.error('Error al cargar las categorías:', error);
+            alert('Hubo un error al cargar las categorías');
         });
-        alert('encontrada')
-    } catch (error) {
-        alert("no encontrada")
-    }
-    
 
     const submitButton = document.createElement('button');
     submitButton.innerText = 'Actualizar Producto';
@@ -199,7 +195,7 @@ function editarProducto(id, titulo, descripcion, image, valor, categoria) {
         const updatedTitle = titleInput.value.trim();
         const updatedDescription = descriptionInput.value.trim();
         const updatedValue = parseInt(valueInput.value);
-        const updatedCategory = categorySelect.value;
+        const updatedCategory = categorySelect.value;  // Seleccionar la categoría actual
         const updatedImage = imgInput.value.trim();
 
         // Validaciones de los campos
@@ -213,18 +209,16 @@ function editarProducto(id, titulo, descripcion, image, valor, categoria) {
             return;
         }
 
-        // Cambiar `images` a ser un solo string en lugar de un array
+        // Crear el objeto para enviar la actualización
         const productoActualizado = {
             title: updatedTitle,
+            category_id: updatedCategory,
             description: updatedDescription,
             value: updatedValue,
-            category_id: updatedCategory,
-            images: updatedImage  // Usamos `images` como cadena de texto
+            images: updatedImage  // Usar una cadena de texto para la imagen
         };
 
-        console.log("Objeto para enviar:", JSON.stringify(productoActualizado));
-
-        // Enviar los datos actualizados a la API
+        // Enviar los datos actualizados al servidor
         fetch(url_api + '/products/' + id, {
             method: 'PATCH',
             headers: {
@@ -262,7 +256,6 @@ function editarProducto(id, titulo, descripcion, image, valor, categoria) {
     // Agregar el modal al body
     document.body.appendChild(modal);
 }
-
 
 // Borrar
 function borrar(id) {
