@@ -1,5 +1,8 @@
+
+
+
 // Api
-const url_api = 'https://api-qxlr.onrender.com';
+const url_api = 'https://fakeapi-pearl.vercel.app/';
 
 // botones
 const agregar = document.getElementById('crear');
@@ -347,100 +350,100 @@ function cargarCategorias() {
 // Llama a la función cuando el documento esté listo
 document.addEventListener('DOMContentLoaded', cargarCategorias);
 
-function editarProducto(id, titulo, descripcion, image, valor, categoria) {
-    // Crear el modal
-    const modal = document.createElement('div');
-    modal.style.position = 'fixed';
-    modal.style.top = '50%';
-    modal.style.left = '50%';
-    modal.style.transform = 'translate(-50%, -50%)';
-    modal.style.backgroundColor = 'lightgrey'; // Color del modal
-    modal.style.padding = '20px';
-    modal.style.zIndex = '1000';
-    modal.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
-    modal.style.borderRadius = '10px'; // Bordes redondeados
+//function editarProducto(id, titulo, descripcion, image, valor, categoria) {
+//    // Crear el modal
+//    const modal = document.createElement('div');
+//    modal.style.position = 'fixed';
+//    modal.style.top = '50%';
+//    modal.style.left = '50%';
+//    modal.style.transform = 'translate(-50%, -50%)';
+//    modal.style.backgroundColor = 'lightgrey'; // Color del modal
+//    modal.style.padding = '20px';
+//    modal.style.zIndex = '1000';
+//    modal.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+//    modal.style.borderRadius = '10px'; // Bordes redondeados
 
-    // Crear los campos de entrada
-    const titleInput = document.createElement('input');
-    titleInput.placeholder = "Nuevo Título";
-    titleInput.value = titulo;
+//    // Crear los campos de entrada
+//    const titleInput = document.createElement('input');
+//    titleInput.placeholder = "Nuevo Título";
+//    titleInput.value = titulo;
 
-    const descriptionInput = document.createElement('input');
-    descriptionInput.placeholder = "Nueva Descripción";
-    descriptionInput.value = descripcion;
+//    const descriptionInput = document.createElement('input');
+//    descriptionInput.placeholder = "Nueva Descripción";
+//    descriptionInput.value = descripcion;
 
-    const valueInput = document.createElement('input');
-    valueInput.type = "number";
-    valueInput.placeholder = "Nuevo Valor";
-    valueInput.value = valor;
+//    const valueInput = document.createElement('input');
+//    valueInput.type = "number";
+//    valueInput.placeholder = "Nuevo Valor";
+//    valueInput.value = valor;
 
-    const categorySelect = document.createElement('select');
-    console.log(categorySelect);
+//    const categorySelect = document.createElement('select');
+//    console.log(categorySelect);
 
-    const imgInput = document.createElement('input');
-    imgInput.placeholder = "nueva imagen";
-    //imgInput.value = JSON.parse(image)[0];
+//    const imgInput = document.createElement('input');
+//    imgInput.placeholder = "nueva imagen";
+//    //imgInput.value = JSON.parse(image)[0];
     
-    // Obtener categorías
-    fetch(url_api + '/categories')
-    .then(response => response.json())
-    .then(categories => {
-        categories.forEach(cat => {
-            const option = document.createElement('option');
-            option.value = cat.category_id;
-            option.text = cat.name;
-            if (cat.category_id === categoria) {
-                option.selected = true; // Seleccionar la categoría actual
-            }
-            categorySelect.appendChild(option);
-        });
-    });
+//    // Obtener categorías
+//    fetch(url_api + '/categories')
+//    .then(response => response.json())
+//    .then(categories => {
+//        categories.forEach(cat => {
+//            const option = document.createElement('option');
+//            option.value = cat.category_id;
+//            option.text = cat.name;
+//            if (cat.category_id === categoria) {
+//                option.selected = true; // Seleccionar la categoría actual
+//            }
+//            categorySelect.appendChild(option);
+//        });
+//    });
 
-    const submitButton = document.createElement('button');
-    submitButton.innerText = 'Actualizar Producto';
-    submitButton.onclick = function() {
-        const updatedTitle = titleInput.value;
-        const updatedDescription = descriptionInput.value;
-        const updatedValue = parseInt(valueInput.value);
-        const updatedCategory = parseInt(categorySelect.value);
-        const updatedImages = imgInput.value;
+//    const submitButton = document.createElement('button');
+//    submitButton.innerText = 'Actualizar Producto';
+//    submitButton.onclick = function() {
+//        const updatedTitle = titleInput.value;
+//        const updatedDescription = descriptionInput.value;
+//        const updatedValue = parseInt(valueInput.value);
+//        const updatedCategory = parseInt(categorySelect.value);
+//        const updatedImages = imgInput.value;
 
-        fetch(url_api + '/products/' + id, {
-            method: 'PATCH',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                title: updatedTitle,
-                description: updatedDescription,
-                value: updatedValue,
-                category_id: parseInt(updatedCategory),
-                images: [updatedImages]
-            })
-        })
-        .then(response => response.json())
-        .then(response => {
-            console.log(response);
-            if (response) {
-                alert('Producto actualizado');
-            }
-            location.reload();
-        });
+//        fetch(url_api + '/products/' + id, {
+//            method: 'PATCH',
+//            headers: {
+//                "Content-Type": "application/json"
+//            },
+//            body: JSON.stringify({
+//                title: updatedTitle,
+//                description: updatedDescription,
+//                value: updatedValue,
+//                category_id: parseInt(updatedCategory),
+//                images: [updatedImages]
+//            })
+//        })
+//        .then(response => response.json())
+//        .then(response => {
+//            console.log(response);
+//            if (response) {
+//                alert('Producto actualizado');
+//            }
+//            location.reload();
+//        });
 
-        document.body.removeChild(modal); // Cerrar modal
-    };
+//        document.body.removeChild(modal); // Cerrar modal
+//    };
 
-    // Agregar campos al modal
-    modal.appendChild(titleInput);
-    modal.appendChild(descriptionInput);
-    modal.appendChild(valueInput);
-    modal.appendChild(categorySelect);
-    modal.appendChild(imgInput);
-    modal.appendChild(submitButton);
+//    // Agregar campos al modal
+//    modal.appendChild(titleInput);
+//    modal.appendChild(descriptionInput);
+//    modal.appendChild(valueInput);
+//    modal.appendChild(categorySelect);
+//    modal.appendChild(imgInput);
+//    modal.appendChild(submitButton);
     
-    // Agregar el modal al body
-    document.body.appendChild(modal);
-}
+//    // Agregar el modal al body
+//    document.body.appendChild(modal);
+//}
 // Inicializar carga de categorías
 document.addEventListener('DOMContentLoaded', function() {
     cargarCategorias();
