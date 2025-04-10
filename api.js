@@ -1,8 +1,4 @@
-
-
-
-// Api
-const url_api = 'https://fakeapi-pearl.vercel.app/';
+const url_api = 'https://fakeapi-pearl.vercel.app/api/';
 
 // botones
 const agregar = document.getElementById('crear');
