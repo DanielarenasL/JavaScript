@@ -347,7 +347,7 @@ function cargarCategorias() {
 // Llama a la función cuando el documento esté listo
 document.addEventListener('DOMContentLoaded', cargarCategorias);
 
-function editarProducto(id, titulo, descripcion, image, valor, categoria) {
+function editarProducto2(id, titulo, descripcion, image, valor, categoria) {
     // Crear el modal
     const modal = document.createElement('div');
     modal.style.position = 'fixed';
